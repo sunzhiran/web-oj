@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.HwStuDao">
+
+    <select id="selectHomeworkByHomeworkId" parameterType="Integer" resultType="HwStu">
+        SELECT
+        hw_stu.hw_stu_id AS hwStuId,
+        hw_stu.stu_id AS stuId,
+        hw_stu.hw_id AS hwId,
+        hw_stu.paper_url AS paperUrl,
+        hw_stu.code_url AS codeUrl,
+        hw_stu.project_url AS projectUrl,
+        hw_stu.sql_url AS sqlUrl,
+        hw_stu.upload_time AS uploadTime,
+        `user`.user_name AS stuName,
+        homework.homework_title AS hwTitle,
+        hw_stu.hw_stu_url AS hwStuUrl,
+        hw_stu.hw_stu_sim AS hwStuSim,
+        hw_stu.hw_stu_sim_id AS hwStuSimId
+        FROM hw_stu
+        LEFT JOIN `user` ON hw_stu.stu_id = `user`.user_id
+        LEFT JOIN homework ON homework.homework_id = hw_stu.hw_id
+        WHERE homework.homework_id=#{hwId}
+        ORDER BY hw_stu.stu_id ASC;
+    </select>
+
+    <select id="selectHomeworkByUserId" parameterType="String" resultType="HwStu">
+        SELECT
+        hw_stu.hw_stu_id AS hwStuId,
+        hw_stu.stu_id AS stuId,
+        hw_stu.hw_id AS hwId,
+        hw_stu.paper_url AS paperUrl,
+        hw_stu.code_url AS codeUrl,
+        hw_stu.project_url AS projectUrl,
+        hw_stu.sql_url AS sqlUrl,
+        hw_stu.upload_time AS uploadTime,
+        homework.homework_title AS hwTitle
+        FROM hw_stu
+        LEFT JOIN `user` ON hw_stu.stu_id = `user`.user_id
+				LEFT JOIN homework ON hw_stu.hw_id = homework.homework_id
+        WHERE `user`.user_id=#{userId}
+        ORDER BY hw_stu.hw_id DESC;
+    </select>
+
+    <select id="selectHwStuById" parameterType="Integer" resultType="HwStu">
+        SELECT
+        hw_stu.hw_stu_id AS hwStuId,
+        hw_stu.stu_id AS stuId,
+        hw_stu.hw_id AS hwId,
+        hw_stu.paper_url AS paperUrl,
+        hw_stu.code_url AS codeUrl,
+        hw_stu.project_url AS projectUrl,
+        hw_stu.sql_url AS sqlUrl,
+        hw_stu.upload_time AS uploadTime,
+        hw_stu.hw_stu_url AS hwStuUrl
+        FROM hw_stu
+        WHERE hw_stu.hw_stu_id = 41
+    </select>
+    <insert id="insertHwStu" parameterType="HwStu" keyProperty="hwStuId" useGeneratedKeys="true">
+        INSERT INTO hw_stu (
+        stu_id,
+        hw_id,
+        paper_url,
+        code_url,
+        project_url,
+        sql_url,
+        upload_time,
+        hw_stu_url
+        )
+        VALUES
+        (#{stuId},#{hwId},#{paperUrl},#{codeUrl},#{projectUrl},#{sqlUrl},#{uploadTime},#{hwStuUrl});
+    </insert>
+
+    <update id="updateHwStuSim" parameterType="HwStu">
+        UPDATE hw_stu
+        SET hw_stu_sim = #{hwStuSim},
+        hw_stu_sim_Id = #{hwStuSimId}
+        WHERE
+	    hw_stu.hw_stu_id = #{hwStuId}
+    </update>
+</mapper>

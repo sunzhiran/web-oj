@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.StuClassDao">
+
+    <select id="selectAllClass" resultType="StuClass">
+        SELECT
+        class.class_id AS classId,
+	    class.class_name AS className,
+        class.class_grade AS classGrade
+        FROM class;
+    </select>
+
+    <select id="selectClassByUserId" parameterType="String" resultType="StuClass">
+        SELECT
+	      class.class_id AS classId,
+	      class.class_name AS className,
+	      class.class_grade AS classGrade
+        FROM class
+        WHERE class.class_id = #{classId};
+    </select>
+
+    <insert id="insertClass" parameterType="StuClass" >
+        INSERT INTO Class(class.class_id,class.class_name,class.class_grade)
+        VALUES(#{classId},#{className},#{classGrade});
+    </insert>
+
+</mapper>

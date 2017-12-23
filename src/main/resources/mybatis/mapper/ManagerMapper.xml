@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.ManagerDao">
+
+    <select id="selectManagerByUserId" parameterType="String" resultType="Manager">
+        SELECT
+	    manager.manager_id AS managerId,
+	    manager.manager_name AS managerName,
+	    manager.manager_password AS managerPassword,
+	    manager.manager_sex AS managerSex
+	    FROM manager
+        WHERE
+	    manager.manager_id = #{managerId}
+    </select>
+
+    <update id="updateManagerById" parameterType="Manager">
+        UPDATE manager
+        SET manager.manager_name=#{managerName},
+        manager.manager_password=#{managerPassword},
+        manager.manager_sex=#{managerSex}
+        WHERE manager.manager_id=#{managerId}
+    </update>
+
+</mapper>

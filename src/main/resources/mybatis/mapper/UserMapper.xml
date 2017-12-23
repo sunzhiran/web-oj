@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.UserDao">
+
+    <select id="selectAllUser" resultType="User">
+        SELECT
+            `user`.user_id AS userId,
+            `user`.user_name AS userName,
+            `user`.user_class AS userClass,
+            `user`.user_password AS userPassword,
+            `user`.user_sex AS userSex,
+            `user`.user_type AS userType,
+            `user`.user_note AS  userNote,
+            `class`.class_name AS userClassName
+        FROM user
+        LEFT JOIN class ON `user`.user_class = class.class_id
+        ORDER BY `user`.user_class DESC,`user`.user_id ASC;
+    </select>
+
+    <select id="selectUserByClassId" parameterType="String" resultType="User">
+        SELECT
+            `user`.user_id AS userId,
+            `user`.user_name AS userName,
+            `user`.user_class AS userClass,
+            `user`.user_password AS userPassword,
+            `user`.user_sex AS userSex,
+            `user`.user_type AS userType,
+            `class`.class_name AS userClassName
+        FROM user
+        LEFT JOIN class ON `user`.user_class = class.class_id
+        WHERE class.class_id=#{classId}
+        ORDER BY `user`.user_class DESC,`user`.user_id ASC;
+    </select>
+
+    <select id="selectUserByUserId" parameterType="String" resultType="User">
+        SELECT
+            `user`.user_id AS userId,
+            `user`.user_name AS userName,
+            `user`.user_class AS userClass,
+            `user`.user_password AS userPassword,
+            `user`.user_sex AS userSex,
+            `user`.user_type AS userType,
+            class.class_name AS  userClassName
+        FROM
+            USER
+        LEFT JOIN class ON class.class_id = `user`.user_class
+        WHERE
+            `user`.user_id = #{userId};
+    </select>
+
+    <select id="selectNoCompletedUserByHomeworkId" parameterType="Integer" resultType="User">
+        SELECT
+	    all_stu.userId AS userId,
+	    all_stu.userName AS userName,
+	    all_stu.userClass AS userClass,
+	    all_stu.userPassword AS userPassword,
+	    all_stu.userSex AS userSex,
+	    all_stu.userType AS userType
+        FROM
+        (SELECT
+	    `user`.user_id AS userId,
+	    `user`.user_name AS userName,
+	    `user`.user_class AS userClass,
+	    `user`.user_password AS userPassword,
+	    `user`.user_sex AS userSex,
+	    `user`.user_type AS userType
+        FROM
+	    `user`
+        LEFT JOIN class ON `user`.user_class = class.class_id
+        LEFT JOIN homework ON homework.homework_class = class.class_id
+        WHERE
+	    homework.homework_id=#{homeworkId}) AS all_stu
+        LEFT JOIN
+        (SELECT
+	    hw_stu.stu_id AS i
+        FROM
+	    hw_stu
+        WHERE
+	    hw_stu.hw_id=#{homeworkId}
+        ORDER BY
+	    hw_stu.stu_id ASC) AS finish_stu
+        ON all_stu.userId = finish_stu.i WHERE finish_stu.i IS NULL;
+
+    </select>
+
+    <select id="selectUserByUserName" parameterType="String" resultType="User">
+        SELECT
+	        `user`.user_id AS userId,
+	        `user`.user_name AS userName,
+	        `user`.user_class AS userClass,
+	        `user`.user_password AS userPassword,
+	        `user`.user_sex AS userSex,
+	        `user`.user_type AS userType,
+	        `class`.class_name AS userClassName
+        FROM  USER
+        LEFT JOIN class ON `user`.user_class = class.class_id
+        WHERE
+	        `user`.user_name = #{userName};
+        ORDER BY `user`.user_class DESC,`user`.user_id ASC;
+    </select>
+
+    <select id="selectUserByPartUserName" parameterType="String" resultType="User">
+        SELECT
+        `user`.user_id AS userId,
+        `user`.user_name AS userName,
+        `user`.user_class AS userClass,
+        `user`.user_password AS userPassword,
+        `user`.user_sex AS userSex,
+        `user`.user_type AS userType
+        FROM  USER
+        WHERE
+        `user`.user_name LIKE #{userName};
+    </select>
+
+    <insert id="insertUser" parameterType="User" >
+        INSERT INTO USER (
+	        `user`.user_id,
+	        `user`.user_name,
+	        `user`.user_password,
+	        `user`.user_class,
+	        `user`.user_type,
+	        `user`.user_sex)
+        VALUES(#{userId},#{userName},#{userPassword},#{userClass},#{userType},#{userSex});
+    </insert>
+
+    <update id="updateUserByUserId" parameterType="User" >
+        UPDATE `user`
+        SET `user`.user_name = #{userName},
+            `user`.user_password = #{userPassword},
+            `user`.user_class = #{userClass},
+            `user`.user_sex = #{userSex},
+            `user`.user_note = #{userNote}
+        WHERE
+	        `user`.user_id = #{userId};
+    </update>
+
+    <update id="updateUserSelf" parameterType="User" >
+        UPDATE `user`
+        SET `user`.user_name = #{userName},
+        `user`.user_password = #{userPassword},
+        `user`.user_sex = #{userSex}
+        WHERE
+        `user`.user_id = #{userId};
+    </update>
+
+</mapper>

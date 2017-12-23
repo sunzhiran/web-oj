@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.NoticeDao">
+    <select id="selectAllNotices" resultType="Notice">
+        SELECT
+	    notice.notice_id AS noticeId,
+	    notice.notice_content AS noticeContent,
+	    notice.notice_time AS noticeTime,
+	    notice.notice_writer AS noticeWriter,
+	    teacher.teacher_name AS noticeWriterName
+        FROM notice
+        LEFT JOIN teacher on teacher.teacher_id = notice.notice_writer
+        ORDER BY notice_time DESC
+    </select>
+
+    <insert id="insertNotice" parameterType="Notice">
+        INSERT INTO notice (
+	    notice.notice_content,
+	    notice.notice_time,
+	    notice.notice_writer)
+        VALUES(#{noticeContent},#{noticeTime},#{noticeWriter})
+    </insert>
+
+</mapper>

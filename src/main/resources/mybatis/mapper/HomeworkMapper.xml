@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.HomeworkDao">
+    <select id="selectAllHomework" resultType="Homework">
+        SELECT
+			homework.homework_id AS homeworkId,
+			homework.homework_title AS homeworkTitle,
+			homework.homework_content AS homeworkContent,
+			homework.homework_time AS homeworkTime,
+			homework.homework_deadline AS homeworkDeadline,
+  			homework.homework_attachment AS homeworkAttachment,
+			homework.homework_writer AS homeworkWriter,
+			homework.homework_class AS homeworkClass
+		FROM
+			homework
+		WHERE homework.homework_is_delete =0
+		ORDER BY homework_deadline DESC,homework_time DESC;
+    </select>
+
+	<select id="selectHomeworkByClassId" parameterType="String" resultType="Homework">
+		SELECT
+			homework.homework_id AS homeworkId,
+			homework.homework_title AS homeworkTitle,
+			homework.homework_content AS homeworkContent,
+			homework.homework_time AS homeworkTime,
+			homework.homework_deadline AS homeworkDeadline,
+  			homework.homework_attachment AS homeworkAttachment,
+			homework.homework_writer AS homeworkWriter,
+			homework.homework_class AS homeworkClass,
+			class.class_name AS homeworkClassName,
+			teacher.teacher_name AS homeworkWriterName
+		FROM
+			homework
+		LEFT JOIN teacher ON teacher.teacher_id = homework.homework_writer
+		LEFT JOIN class ON homework.homework_class = class.class_id
+		WHERE homework.homework_is_delete =0  AND class.class_id=#{classId}
+		ORDER BY homework_deadline DESC,homework_time DESC;
+	</select>
+
+	<select id="selectHomeworkByTeacherId" resultType="Homework" parameterType="Teacher">
+		SELECT
+			homework.homework_id AS homeworkId,
+			homework.homework_title AS homeworkTitle,
+			homework.homework_content AS homeworkContent,
+			homework.homework_time AS homeworkTime,
+			homework.homework_deadline AS homeworkDeadline,
+  			homework.homework_attachment AS homeworkAttachment,
+			homework.homework_writer AS homeworkWriter,
+			homework.homework_class AS homeworkClass,
+			class.class_name AS homeworkClassName
+		FROM
+			homework
+		JOIN teacher ON teacher.teacher_id = homework.homework_writer
+		LEFT JOIN class ON homework.homework_class = class.class_id
+		WHERE homework.homework_is_delete =0  AND teacher.teacher_id=#{teacherId}
+		ORDER BY homework_deadline DESC,homework_time DESC;
+	</select>
+
+	<select id="selectHomeworkByPartTitle" parameterType="String" resultType="Homework">
+		SELECT
+		homework.homework_id AS homeworkId,
+		homework.homework_title AS homeworkTitle,
+		homework.homework_content AS homeworkContent,
+		homework.homework_time AS homeworkTime,
+		homework.homework_writer AS homeworkWriter
+		FROM
+		homework
+		WHERE homework.homework_is_delete =0  AND homework_title LIKE #{homeworkTitle}
+		ORDER BY homework_time DESC
+	</select>
+
+
+
+	<insert id="insertHomework" parameterType="Homework" keyProperty="homeworkId" useGeneratedKeys="true" >
+		<!--<selectKey keyProperty='homeworkId' resultType='Integer' order='AFTER'>
+
+		</selectKey>-->
+		INSERT INTO homework (
+			homework.homework_title,
+			homework.homework_deadline,
+			homework.homework_time,
+			homework.homework_writer,
+			homework.homework_class)
+		VALUES(#{homeworkTitle},#{homeworkDeadline},#{homeworkTime},#{homeworkWriter},#{homeworkClass});
+	</insert>
+
+	<select id="selectHomeworkById" parameterType="Integer" resultType="Homework">
+		SELECT
+			homework.homework_id AS homeworkId,
+			homework.homework_title AS homeworkTitle,
+			homework.homework_content AS homeworkContent,
+			homework.homework_attachment AS homeworkAttachment,
+			homework.homework_deadline AS homeworkDeadline,
+			homework.homework_time AS homeworkTime,
+			homework.homework_writer AS homeworkWriter,
+			homework.homework_class AS homeworkClass
+		FROM
+			homework
+		WHERE
+			homework.homework_id = #{homeworkId};
+	</select>
+
+	<update id="updateHomeworkById" parameterType="Homework">
+		UPDATE homework
+		SET homework.homework_title = #{homeworkTitle},
+ 			homework.homework_deadline = #{homeworkDeadline}
+		WHERE
+			homework.homework_id = #{homeworkId};
+	</update>
+
+	<update id="updateHomeworkAttachment" parameterType="Homework">
+		UPDATE homework
+		SET homework.homework_attachment =#{homeworkAttachment}
+		WHERE
+		homework.homework_id = #{homeworkId};
+	</update>
+
+	<update id="deleteHomeworkById" parameterType="Integer">
+		UPDATE homework
+		SET
+			homework.homework_is_delete = 1
+		WHERE
+			homework.homework_id = #{homeworkId};
+	</update>
+</mapper>

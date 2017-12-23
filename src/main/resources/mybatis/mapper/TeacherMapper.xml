@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.TeacherDao">
+
+    <select id="selectAllTeachers" resultType="Teacher">
+        SELECT teacher.teacher_id AS teacherId,
+        teacher.teacher_name AS teacherName,
+        teacher.teacher_password AS teacherPassword,
+        teacher.teacher_sex AS teacherSex,
+        teacher.teacher_note AS teacherNote
+        FROM teacher
+        ORDER BY teacher.teacher_id ASC;
+    </select>
+
+    <select id="selectTeacherByUserId" parameterType="String" resultType="Teacher">
+        SELECT
+	    teacher.teacher_id AS teacherId,
+	    teacher.teacher_name AS teacherName,
+	    teacher.teacher_password AS teacherPassword,
+	    teacher.teacher_sex AS teacherSex,
+        teacher.teacher_note AS teacherNote
+        FROM teacher
+        WHERE teacher.teacher_id = #{teacherId}
+    </select>
+
+    <insert id="insertTeacher" parameterType="Teacher">
+        INSERT INTO teacher(teacher.teacher_id,teacher.teacher_name,teacher.teacher_password,teacher.teacher_sex)
+        VALUES(#{teacherId},#{teacherName},#{teacherPassword},#{teacherSex})
+    </insert>
+
+    <update id="updateTeacherByManager" parameterType="Teacher" >
+        UPDATE teacher
+        SET teacher.teacher_name=#{teacherName},
+            teacher.teacher_password=#{teacherPassword},
+            teacher.teacher_sex=#{teacherSex},
+            teacher.teacher_note=#{teacherNote}
+        WHERE teacher.teacher_id=#{teacherId}
+    </update>
+
+    <update id="updateTeacherById" parameterType="Teacher">
+        UPDATE teacher
+        SET teacher.teacher_name=#{teacherName},
+            teacher.teacher_password=#{teacherPassword},
+            teacher.teacher_sex=#{teacherSex}
+        WHERE teacher.teacher_id=#{teacherId}
+    </update>
+
+</mapper>
