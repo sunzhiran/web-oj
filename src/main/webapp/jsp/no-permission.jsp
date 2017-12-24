@@ -1,4 +1,5 @@
 <%@ page import="com.sdkd.pojo.User" %>
+<%@ page import="com.sdkd.pojo.RBACUser" %>
 <%@page contentType="text/html;charset=utf-8" language="java" %>
 <%
     String path= request.getContextPath();
@@ -19,7 +20,9 @@
 </head>
 <body>
 <%
-    User user = (User) session.getAttribute("user");
+//    User user = (User) session.getAttribute("user");
+    RBACUser user = (RBACUser) session.getAttribute("rbacUser");
+    String pageName = (String) request.getAttribute("pageName");
 %>
 <div class="navbar navbar-inverse" role="navigation">
     <div class="navbar-header">
@@ -64,19 +67,10 @@
     </div><!--/.navbar-collapse -->
     <div class="templatemo-content-wrapper">
         <div class="templatemo-content">
-            <h1>各位同学：</h1>
-            <p><h1>
-            本系统可作为高校计算机相关专业web相关课程的学习使用<br>
-            主要可实现课程作业的提交和自动部署，方便老师检查作业；
-            并提供了相关信息的管理功能。
-            <br>
-            如对本系统有任何建议，可邮箱web@stust.com
-        </h1></p>
-
+            <h1 style="text-align:center;color: red">无权限访问页面<%=pageName%></h1>
+            <img src="/web-oj/images/timg.jpg">
         </div>
     </div>
-
-
 
 
     <footer class="templatemo-footer">
@@ -86,19 +80,19 @@
     </footer>
 
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">确定退出？</h4>
-            </div>
-            <div class="modal-footer">
-                <a href="/web-oj/jsp/login.jsp" class="btn btn-primary">是</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">确定退出？</h4>
+                </div>
+                <div class="modal-footer">
+                    <a href="/web-oj/jsp/login.jsp" class="btn btn-primary">是</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

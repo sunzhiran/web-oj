@@ -1,10 +1,14 @@
 package com.sdkd.controller;
 
 import com.sdkd.pojo.Manager;
+import com.sdkd.pojo.RBACAccess;
+import com.sdkd.pojo.RBACUser;
 import com.sdkd.pojo.StuClass;
 import com.sdkd.pojo.Teacher;
 import com.sdkd.pojo.User;
+import com.sdkd.service.AccessService;
 import com.sdkd.service.ManagerService;
+import com.sdkd.service.RoleService;
 import com.sdkd.service.TeacherService;
 import com.sdkd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,12 @@ public class UserController {
 
     @Autowired
     private ManagerService managerService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private AccessService accessService;
 
     @RequestMapping("selectAllUsers")
     public ModelAndView selectAllUsers(HttpServletRequest request, HttpSession session) {
@@ -85,6 +95,10 @@ public class UserController {
                 modelAndView.setViewName("login");
             }
         }
+        List<RBACAccess> accessByUser = userService.getAccessByUser(userId);
+        session.setAttribute("accesss", accessByUser);
+        RBACUser rbacUser = userService.getRBACUser(userId);
+        session.setAttribute("rbacUser", rbacUser);
         return modelAndView;
     }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.UserRoleDao">
+
+    <insert id="insertUserRole" parameterType="RBACUserRole" >
+        INSERT INTO rbac_user_role (
+        `rbac_user_role`.rbac_user_role_uid,
+        rbac_user_role.rbac_user_role_rid)
+        VALUES(#{uId},#{rId});
+    </insert>
+
+    <select id="selectUserRole" parameterType="String" resultType="RBACUserRole">
+        SELECT rbac_user_role_id AS urId,
+        rbac_user_role_uid AS uId,
+        rbac_user_role_rid AS rId,
+        rbac_user_role_status AS status
+        FROM rbac_user_role
+        WHERE rbac_user_role_uid = #{userId};
+    </select>
+
+
+
+</mapper>

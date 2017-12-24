@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.AccessDao">
+
+    <select id="selectAllAccess" resultType="RBACAccess">
+        SELECT
+        `rbac_access`.rbac_access_id AS accessId,
+        `rbac_access`.rbac_access_title AS accessTitle,
+        `rbac_access`.rbac_access_urls AS accessURL,
+		`rbac_access`.rbac_access_status AS accessStatus
+        FROM rbac_access
+    </select>
+
+    <!--<select id="selectAllAccess" parameterType="integer" resultType="RBACAccess">-->
+        <!--SELECT-->
+        <!--`rbac_access`.rbac_access_id AS accessId,-->
+        <!--`rbac_access`.rbac_access_title AS accessTitle,-->
+        <!--`rbac_access`.rbac_access_urls AS accessURL,-->
+        <!--`rbac_access`.rbac_access_status AS accessStatus-->
+        <!--FROM rbac_access WHERE rbac_access_id = #{accessId}-->
+    <!--</select>-->
+
+    <insert id="insertAccess" parameterType="RBACAccess" >
+        INSERT INTO rbac_access (
+        `rbac_access`.rbac_access_title,
+        rbac_access.rbac_access_urls)
+        VALUES(#{accessTitle},#{accessURL});
+    </insert>
+
+    <select id="selectAccessByAccessTitle" parameterType="String" resultType="RBACAccess">
+        SELECT
+        `rbac_access`.rbac_access_id AS accessId,
+        `rbac_access`.rbac_access_title AS accessTitle,
+        `rbac_access`.rbac_access_urls AS accessURL,
+        `rbac_access`.rbac_access_status AS accessStatus
+        FROM rbac_access
+        WHERE rbac_access.rbac_access_title=#{accessName};
+    </select>
+
+    <select id="selectByAccessId" parameterType="integer" resultType="RBACAccess">
+        SELECT
+        `rbac_access`.rbac_access_id AS accessId,
+        `rbac_access`.rbac_access_title AS accessTitle,
+        `rbac_access`.rbac_access_urls AS accessURL,
+        `rbac_access`.rbac_access_status AS accessStatus
+        FROM rbac_access
+        WHERE rbac_access_id=#{accessId};
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.RoleAccessDao">
+
+    <insert id="insertRoleAccess" parameterType="RBACRoleAccess" >
+        INSERT INTO rbac_role_access (
+        `rbac_role_access`.rbac_role_access_rid,
+        rbac_role_access.rbac_role_access_aid)
+        VALUES(#{rId},#{aId});
+    </insert>
+
+    <select id="selectRoleAccessByRoleId" resultType="RBACRoleAccess" parameterType="Integer">
+        SELECT
+        rbac_role_access.rbac_role_access_id AS raId,
+        rbac_role_access.rbac_role_access_rid AS rId,
+        rbac_role_access.rbac_role_access_aid AS aId,
+        rbac_role_access.rbac_role_access_status AS status
+        FROM rbac_role_access
+        WHERE rbac_role_access.rbac_role_access_rid =#{rId}
+    </select>
+
+
+</mapper>

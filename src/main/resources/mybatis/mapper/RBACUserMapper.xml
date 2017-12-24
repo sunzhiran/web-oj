@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdkd.dao.RBACUserDao">
+
+
+    <select id="selectRBACUserByUserId" parameterType="String" resultType="RBACUser">
+        SELECT
+        `rbac_user`.rbac_user_id AS userId,
+        `rbac_user`.rbac_user_name AS userName,
+        `rbac_user`.rbac_user_class AS userClass,
+        `rbac_user`.rbac_user_password AS userPassword,
+        `rbac_user`.rbac_user_is_admin AS userIsAdmin,
+        `rbac_user`.rbac_user_status AS userStatus,
+        class.class_name AS  userClassName
+        FROM rbac_user
+        LEFT JOIN class on class.class_id=rbac_user.rbac_user_class
+        WHERE
+        `rbac_user`.rbac_user_id = #{userId};
+    </select>
+
+    <select id="selectAllUser" resultType="RBACUser">
+        SELECT
+        `rbac_user`.rbac_user_id AS userId,
+        `rbac_user`.rbac_user_name AS userName,
+        `rbac_user`.rbac_user_class AS userClass,
+        `rbac_user`.rbac_user_password AS userPassword,
+        `rbac_user`.rbac_user_is_admin AS userIsAdmin,
+        `rbac_user`.rbac_user_status AS userStatus,
+        class.class_name AS  userClassName
+        FROM rbac_user
+        LEFT JOIN class on class.class_id=rbac_user.rbac_user_class
+        ORDER BY `rbac_user`.rbac_user_class DESC,`rbac_user`.rbac_user_id ASC;
+    </select>
+
+    <insert id="insertUser" parameterType="RBACUser" >
+        INSERT INTO rbac_user (
+	    `rbac_user`.rbac_user_id,
+	    `rbac_user`.rbac_user_name,
+	    `rbac_user`.rbac_user_password,
+	    `rbac_user`.rbac_user_class)
+        VALUES(#{userId},#{userName},#{userPassword},#{userClass});
+    </insert>
+
+    <update id="updateUserSelf" parameterType="RBACUser" >
+        UPDATE `rbac_user`
+        SET `rbac_user`.rbac_user_name = #{userName},
+        `rbac_user`.rbac_user_password = #{userPassword}
+        WHERE
+        `rbac_user`.rbac_user_id = #{userId};
+    </update>
+
+</mapper>
